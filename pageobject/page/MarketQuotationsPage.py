@@ -1,14 +1,13 @@
 #!/user/bin/env python
 # -*- coding:utf-8 -*-
+from selenium.webdriver.common.by import By
+from pageobject.page.BasePage import BasePage
 
-from pageobject.driver.AndroidClient import AndroidClient
 
-
-class MarketQuotationsPage(object):
+class MarketQuotationsPage(BasePage):
 
     def getPriceByName(self,name) ->float:
-        #todo:
-        price=AndroidClient.driver\
-            .find_element_by_xpath("//*[contains(@resource-id,'index_name') and @text='"+name+"']"+
-            "/..//*[contains(@resource-id,'index_price')]").text
+        priceLocator=(By.XPATH,"//*[contains(@resource-id,'index_name') and @text='"+name+"']"+
+            "/..//*[contains(@resource-id,'index_price')]")
+        price=self.find(priceLocator).text
         return float(price)
