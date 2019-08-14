@@ -13,7 +13,15 @@ class SearchPage(BasePage):
         return self
 
     def addToSelected(self,key):
-        self.find(key).click()
+        follow_button=(By.XPATH,"//*[contains(@resource-id,'stockCode') and contains(@text,'%s')]/../../.."%key+
+                                "//*[contains(@resource-id,'follow_btn')]")
+        self.find(follow_button).click()
+        return self
+
+    def removeFromSelected(self,key):
+        followed_button=(By.XPATH,"//*[contains(@resource-id,'stockCode') and contains(@text,'%s')]/../../.."%key+
+                                "//*[contains(@resource-id,'followed_btn')]")
+        self.find(followed_button).click()
         return self
 
     def isInSelected(self,key):
@@ -23,9 +31,14 @@ class SearchPage(BasePage):
         print(id)
         return "followed_btn" in id
 
+    def cancel(self):
+        self.findByText("取消").click()
+
     def searcByUser(self, key):
+        #todo:作业2
         pass
 
     def isFollowed(self):
+        #todo:作业2
         pass
 

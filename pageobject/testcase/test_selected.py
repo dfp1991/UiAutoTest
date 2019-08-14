@@ -2,19 +2,49 @@
 # -*- coding:utf-8 -*-
 
 import pytest
-
 from pageobject.page.App import App
+from pageobject.page.MainPage import MainPage
 
 class TestSelected(object):
+    mainPage=MainPage
+    @classmethod
+    def setup_class(cls):
+        cls.mainPage=App.main()
+
+    def setup_method(self):
+        self.mainPage = TestSelected.mainPage
+        self.searchPage = self.mainPage.gotoSearch()
+
     def test_price(self):
-        main=App.main()
-        assert main.gotoSelected().getPriceByName("苹果") > 200
+        assert self.mainPage.gotoSelected().getPriceByName("苹果") > 200
 
     def test_is_selected_stock(self):
-        searchPage=App.main().gotoSearch().search("alibaba")
-        assert searchPage.isInSelected("BABA")==True
-        assert searchPage.isInSelected("1688")==False
+        self.searchPage.search("alibaba")
+        assert self.searchPage.isInSelected("BABA")==True
+        assert self.searchPage.isInSelected("1688")==False
+
+    @pytest.mark.parametrize("key,code",[
+        ("招商银行","SH600036"),
+        ("平安银行","SZ000001"),
+        ("pingan", "SH601318")
+    ])
+    def test_is_selected_stock_hs(self,key,code):
+        self.searchPage.search(key)
+        assert self.searchPage.isInSelected(code)==False
+
+    def teardown_method(self):
+        self.searchPage.cancel()
+
+    def test_add_stock_hs(self):
+        key="招商银行"
+        code="SH600036"
+        searchPage=self.searchPage.search(key)
+        if searchPage.isInSelected(code)==True:
+            searchPage.removeFromSelected(code)
+        searchPage.addToSelected(code)
+        assert searchPage.isInSelected(code)==True
 
     def test_is_follow_user(self):
+        #todo:作业2
         pass
 
