@@ -13,6 +13,7 @@ from pageobject.page.MarketQuotationsPage import MarketQuotationsPage
 
 class MainPage(BasePage):
     _profile_button=(By.ID,"user_profile_icon")
+    _search_button=(By.ID,"home_search")
     def gotoSelected(self):
         #调用全局的driver对象使用webdriver.api定位元素
         zixuan=(By.XPATH,"//*[@text='自选']")
@@ -30,8 +31,7 @@ class MainPage(BasePage):
         return MarketQuotationsPage()
 
     def gotoSearch(self) ->SearchPage:
-        search_button=(By.ID,"home_search")
-        self.find(search_button).click()
+        self.find(self._search_button).click()
         return SearchPage()
 
     def gotoProfile(self):
